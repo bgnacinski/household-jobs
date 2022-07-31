@@ -68,14 +68,19 @@ class Tasks extends ResourceController
         }
 
         $model = new TasksModel();
-        $response = $model->addTask($input);
+        $result = $model->addTask($input);
 
-        switch($response["status"]){
+        switch($result["status"]){
             case "success":
-                return $this->respondCreated($response["data"]);
+                $response = [
+                    "status" => "created",
+                    "data" => $result["data"]
+                ];
+
+                return $this->respondCreated($response);
 
             default:
-                return $this->failValidationErrors($response["errors"]);
+                return $this->failValidationErrors($result["errors"]);
         }
     }
 
@@ -102,7 +107,12 @@ class Tasks extends ResourceController
 
         switch($result["status"]){
             case "success":
-                return $this->respondUpdated($result["data"]);
+                $response = [
+                    "status" => "updated",
+                    "data" => $result["data"]
+                ];
+
+                return $this->respondUpdated($response);
 
             case "notfound":
                 return $this->failNotFound("Task with ID $id not found.");
@@ -122,7 +132,12 @@ class Tasks extends ResourceController
 
         switch($result["status"]){
             case "success":
-                return $this->respondDeleted($result["data"]);
+                $response = [
+                    "status" => "deleted",
+                    "data" => $result["data"]
+                ];
+
+                return $this->respondDeleted($response);
 
             default:
                 return $this->failNotFound("Task with ID $id not found.");
