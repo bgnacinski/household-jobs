@@ -79,4 +79,28 @@ class PeopleModel extends Model
             ];
         }
     }
+
+    public function updatePerson(int $id, array $input){
+        if(empty($this->getPersonByID($id))){
+            return [
+                "status" => "notfound"
+            ];
+        }
+
+        //removing empty entries from input
+        foreach($input as $key => $value){
+            if(empty($value)){
+                unset($input[$key]);
+            }
+        }
+
+        $this->update($id, $input);
+
+        $updated_object = $this->getPersonByID($id);
+
+        return [
+            "status" => "success",
+            "data" => $updated_object
+        ];
+    }
 }

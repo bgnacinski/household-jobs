@@ -80,4 +80,31 @@ class People extends ResourceController
                 return $this->failValidationErrors($result["errors"]);
         }
     }
+
+    public function update($id = null){
+        if(is_null($id)){
+            return $this->failNotFound();
+        }
+
+        $input = [
+            "name" => $this->request->getVar("name"),
+            "on_duty" => $this->request->getVar("on_duty")
+        ];
+
+        $model = new PeopleModel();
+        $result = $model->updatePerson($id, $input);
+
+        switch($result["status"]){
+            case "success":
+                $response = [
+                    "status" => "updated",
+                    "data" => $result["data"]
+                ];
+
+                return $this->respondUpdated($response);
+
+            default:
+                return $this->failNotFound("Task with ID $id not found.");
+        }
+    }
 }
