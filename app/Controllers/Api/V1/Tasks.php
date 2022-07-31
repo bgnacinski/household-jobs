@@ -19,7 +19,7 @@ class Tasks extends ResourceController
 
         $result = $model->getAllTasks($offset, $limit);
 
-        if(empty($result)){
+        if(!empty($result)){
             $response = [
                 "status" => "success",
                 "data" => $result
