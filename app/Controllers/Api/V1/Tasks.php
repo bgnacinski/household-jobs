@@ -60,6 +60,13 @@ class Tasks extends ResourceController
             "is_special" => $this->request->getPost("is_special")
         ];
 
+        if(strtolower($input["is_special"]) == "true" or $input["is_special"] == "1"){
+            $input["is_special"] = true;
+        }
+        else{
+            $input["is_special"] = false;
+        }
+
         $model = new TasksModel();
         $response = $model->addTask($input);
 
@@ -69,6 +76,39 @@ class Tasks extends ResourceController
 
             default:
                 return $this->failValidationErrors($response["errors"]);
+        }
+    }
+
+    public function update($id = null){
+        if(is_null($id)){
+            return $this->failNotFound();
+        }
+
+        $input = [
+            "name" => $this->request->getVar("name"),
+            "duration" => $this->request->getVar("duration"),
+            "is_special" => $this->request->getVar("is_special")
+        ];
+
+        if(strtolower($input["is_special"]) == "true" or $input["is_special"] == "1"){
+            $input["is_special"] = true;
+        }
+        else{
+            $input["is_special"] = false;
+        }
+
+        $model = new TasksModel();
+        $result = $model->updateTask($id, $input);
+
+        switch($result["status"]){
+            case "success":
+                return $this->respondUpdated($result["data"]);
+
+            case "notfound":
+                return $this->failNotFound("Task with ID $id not found.");
+
+            default:
+                return $this->failValidationErrors($result["errors"]);
         }
     }
 }
