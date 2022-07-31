@@ -60,8 +60,6 @@ class Tasks extends ResourceController
             "is_special" => $this->request->getPost("is_special")
         ];
 
-        print_r($input);
-
         $model = new TasksModel();
         $response = $model->addTask($input);
 
