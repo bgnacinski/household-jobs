@@ -49,7 +49,7 @@ class Tasks extends ResourceController
             return $this->respond($response);
         }
         else{
-            return $this->failNotFound();
+            return $this->failNotFound("Task with ID $id not found.");
         }
     }
 
@@ -109,6 +109,23 @@ class Tasks extends ResourceController
 
             default:
                 return $this->failValidationErrors($result["errors"]);
+        }
+    }
+
+    public function delete($id = null){
+        if(is_null($id)){
+            return $this->failNotFound();
+        }
+
+        $model = new TasksModel();
+        $result = $model->deleteTask($id);
+
+        switch($result["status"]){
+            case "success":
+                return $this->respondDeleted($result["data"]);
+
+            default:
+                return $this->failNotFound("Task with ID $id not found.");
         }
     }
 }

@@ -100,10 +100,10 @@ class TasksModel extends Model
             }
         }
 
-        $validation_rules      = [
+        $validation_rules = [
             "duration" => "integer"
         ];
-        $validation_messages   = [
+        $validation_messages = [
             "integer" => "Duration value must be an integer."
         ];
 
@@ -126,5 +126,23 @@ class TasksModel extends Model
                 "errors" => $this->errors()
             ];
         }
+    }
+
+    public function deleteTask(int $id){
+        $result = $this->getTaskByID($id);
+
+        if(empty($result)){
+            return [
+                "status" => "notfound"
+            ];
+        }
+
+        $object_to_delete = $result;
+        $this->delete($id);
+
+        return [
+            "status" => "success",
+            "data" => $object_to_delete
+        ];
     }
 }
