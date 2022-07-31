@@ -19,8 +19,18 @@ class PeopleModel extends Model
     protected $deletedField  = 'deleted_at';
 
     // Validation
-    protected $validationRules      = [];
-    protected $validationMessages   = [];
+    protected $validationRules      = [
+        "name" => "required",
+        "on_duty" => "required"
+    ];
+    protected $validationMessages   = [
+        "name" => [
+            "required" => "Name field is required."
+        ],
+        "on_duty" => [
+            "required" => "On duty field is required."
+        ]
+    ];
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 
@@ -47,5 +57,26 @@ class PeopleModel extends Model
 
     public function getPersonByID(int $id){
         return $this->find($id);
+    }
+
+    public function addPerson(array $input){
+        $val_result = $this->validate($input);
+
+        if($val_result){
+            $this->save($input);
+
+            $created_object = $this->getPersonByID($this->getInsertID());
+
+            return [
+                "status" => "success",
+                "data" => $created_object
+            ];
+        }
+        else{
+            return [
+                "status" => "valerr",
+                "errors" => $this->errors()
+            ];
+        }
     }
 }
