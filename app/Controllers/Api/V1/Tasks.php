@@ -20,10 +20,15 @@ class Tasks extends ResourceController
         $result = $model->getAllTasks($offset, $limit);
 
         if(empty($result)){
-            return $this->respond($result);
+            $response = [
+                "status" => "success",
+                "data" => $result
+            ];
+
+            return $this->respond($response);
         }
         else{
-            return $this->respondNoContent();
+            return $this->failNotFound();
         }
     }
 }
