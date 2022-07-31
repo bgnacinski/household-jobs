@@ -107,4 +107,26 @@ class People extends ResourceController
                 return $this->failNotFound("Task with ID $id not found.");
         }
     }
+
+    public function delete($id = null){
+        if(is_null($id)){
+            return $this->failNotFound();
+        }
+
+        $model = new PeopleModel();
+        $result = $model->deletePerson($id);
+
+        switch($result["status"]){
+            case "success":
+                $response = [
+                    "status" => "deleted",
+                    "data" => $result["data"]
+                ];
+
+                return $this->respondDeleted($response);
+
+            default:
+                return $this->failNotFound("Task with ID $id not found.");
+        }
+    }
 }

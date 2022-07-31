@@ -103,4 +103,22 @@ class PeopleModel extends Model
             "data" => $updated_object
         ];
     }
+
+    public function deletePerson(int $id){
+        $result = $this->getPersonByID($id);
+
+        if(empty($result)){
+            return [
+                "status" => "notfound"
+            ];
+        }
+
+        $object_to_delete = $result;
+        $this->delete($id);
+
+        return [
+            "status" => "success",
+            "data" => $object_to_delete
+        ];
+    }
 }
