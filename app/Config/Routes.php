@@ -39,7 +39,7 @@ $routes->get('/', 'Home::index');
 
 $routes->group("api", function($routes){
     $routes->group("v1", function($routes){
-        
+        $routes->resource("tasks", ["controller" => "Api\\V1\\Tasks"]);
     });
 });
 
