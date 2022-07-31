@@ -85,4 +85,46 @@ class TasksModel extends Model
             ];
         }
     }
+
+    public function updateTask(int $id, array $input){
+        if(empty($this->getTaskByID($id))){
+            return [
+                "status" => "notfound"
+            ];
+        }
+
+        //removing empty entries from input
+        foreach($input as $key => $value){
+            if(empty($value)){
+                unset($input[$key]);
+            }
+        }
+
+        $validation_rules      = [
+            "duration" => "integer"
+        ];
+        $validation_messages   = [
+            "integer" => "Duration value must be an integer."
+        ];
+
+        $this->validation->setRules($validation_rules, $validation_messages);
+        $val_result = $this->validation->run($input);
+
+        if($val_result){
+            $this->update($id, $input);
+
+            $updated_object = $this->getTaskByID($id);
+
+            return [
+                "status" => "success",
+                "data" => $updated_object
+            ];
+        }
+        else{
+            return [
+                "status" => "valerr",
+                "errors" => $this->errors()
+            ];
+        }
+    }
 }
